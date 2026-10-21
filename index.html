@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#17385f" />
+  <title>마음결 | 심리학 이해도 테스트</title>
+  <meta name="description" content="방어기제, 핵심감정, MBTI, 애니어그램과 심리학 개념을 문제로 익히는 학습형 퀴즈" />
+  <meta property="og:title" content="마음결 | 심리학 이해도 테스트" />
+  <meta property="og:description" content="네 가지 주제와 심리학 개념 퀴즈로 이해도를 차근차근 확인해 보세요." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="assets/og-image.png" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">본문으로 바로가기</a>
+  <header class="topbar">
+    <button class="brand" type="button" data-home aria-label="마음결 홈으로">
+      <span class="brand-mark" aria-hidden="true">결</span>
+      <span>마음결</span>
+    </button>
+    <div class="top-actions">
+      <button class="ghost-btn" id="openProgress" type="button">나의 기록</button>
+      <button class="icon-btn" id="soundToggle" type="button" aria-label="효과음 끄기" aria-pressed="true">♪</button>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <section id="homeView" class="view">
+      <div class="hero wrap">
+        <div class="hero-copy">
+          <span class="eyebrow">PSYCHOLOGY LEARNING LAB</span>
+          <h1>외우는 문제보다,<br /><em>이해하는 질문</em></h1>
+          <p>사람의 마음을 단정하지 않고, 근거와 맥락으로 살펴보는 심리학 학습 테스트입니다.</p>
+          <div class="hero-meta" aria-label="테스트 구성">
+            <span><b>5</b>개 주제</span><i></i><span><b>140</b>문항</span><i></i><span>선택 즉시 해설</span>
+          </div>
+        </div>
+        <img class="hero-art" src="assets/hero-clay.png" alt="질문과 감정, 생각의 연결을 표현한 클레이 일러스트" />
+      </div>
+
+      <section class="wrap section-block" aria-labelledby="tests-title">
+        <div class="section-heading">
+          <div><span class="section-no">01</span><h2 id="tests-title">이해도 테스트</h2></div>
+          <p>관심 있는 주제부터 시작하세요. 레벨별 10문항으로 구성됩니다.</p>
+        </div>
+        <div id="topicGrid" class="topic-grid"></div>
+      </section>
+
+      <section class="wrap concept-banner" aria-labelledby="concept-title">
+        <img src="assets/cover-concepts.png" alt="책과 프리즘, 돋보기가 놓인 심리학 학습 책상" />
+        <div class="concept-copy">
+          <span class="eyebrow light">ONE-LEVEL SPECIAL</span>
+          <h2 id="concept-title">심리학 개념 퀴즈</h2>
+          <p>인지·학습·사회·발달·연구방법의 핵심 개념을 20개의 객관식 문제로 확인합니다.</p>
+          <button class="primary-btn light-btn" type="button" data-start="concepts">20문항 시작하기 <span>→</span></button>
+        </div>
+      </section>
+
+      <section class="wrap principles" aria-labelledby="principles-title">
+        <div class="section-heading compact"><div><span class="section-no">02</span><h2 id="principles-title">이 테스트의 원칙</h2></div></div>
+        <div class="principle-grid">
+          <article><span>01</span><h3>진단이 아닌 학습</h3><p>성격유형이나 정신건강 상태를 판정하지 않습니다.</p></article>
+          <article><span>02</span><h3>단정보다 가설</h3><p>한 가지 행동만으로 타인의 내면을 확정하지 않습니다.</p></article>
+          <article><span>03</span><h3>맥락과 근거</h3><p>상황, 반복 패턴, 실제 관찰을 함께 살펴봅니다.</p></article>
+        </div>
+      </section>
+    </section>
+
+    <section id="quizView" class="view hidden" aria-live="polite">
+      <div class="quiz-shell wrap">
+        <aside class="quiz-side">
+          <button class="back-link" type="button" data-home>← 전체 테스트</button>
+          <img id="quizCover" class="quiz-cover" alt="" />
+          <span id="quizKicker" class="eyebrow"></span>
+          <h1 id="quizTitle"></h1>
+          <p id="quizDescription"></p>
+          <div id="levelTabs" class="level-tabs" role="tablist" aria-label="레벨 선택"></div>
+          <div class="side-progress">
+            <div><span>진행률</span><strong id="sideProgressText">0 / 10</strong></div>
+            <div class="progress-track"><span id="sideProgressBar"></span></div>
+          </div>
+          <button id="resetLevel" class="text-btn" type="button">이 레벨 다시 풀기</button>
+        </aside>
+
+        <div class="quiz-main">
+          <div class="quiz-toolbar">
+            <div id="quizStats" class="quiz-stats"></div>
+            <div class="filter-group" aria-label="문제 필터">
+              <button class="filter active" type="button" data-filter="all">전체</button>
+              <button class="filter" type="button" data-filter="unanswered">미응답</button>
+              <button class="filter" type="button" data-filter="wrong">오답</button>
+            </div>
+          </div>
+          <div id="questionList" class="question-list"></div>
+          <div id="emptyState" class="empty-state hidden"><span>✓</span><h3>해당하는 문제가 없어요</h3><p>다른 필터를 선택해 보세요.</p></div>
+          <section id="resultCard" class="result-card hidden" aria-labelledby="result-title">
+            <span class="eyebrow">LEVEL COMPLETE</span>
+            <h2 id="result-title">채점이 완료됐어요</h2>
+            <div class="score-ring"><strong id="resultScore">0</strong><span>점</span></div>
+            <p id="resultMessage"></p>
+            <div class="result-actions">
+              <button id="reviewWrong" class="secondary-btn" type="button">오답만 보기</button>
+              <button id="nextLevel" class="primary-btn" type="button">다음 레벨 <span>→</span></button>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="progressDialog" class="progress-dialog">
+    <div class="dialog-head"><div><span class="eyebrow">MY PROGRESS</span><h2>나의 학습 기록</h2></div><button class="icon-btn" data-close-dialog aria-label="닫기">×</button></div>
+    <div id="progressContent" class="progress-content"></div>
+    <button id="resetAll" class="danger-btn" type="button">전체 기록 초기화</button>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
