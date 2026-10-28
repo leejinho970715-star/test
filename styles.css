@@ -74,6 +74,19 @@ button:focus-visible { outline: 3px solid rgba(40, 102, 157, .28); outline-offse
 .topic-footer { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-top: 20px; font-size: 14px; font-weight: 700; }
 .card-arrow { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: #fff; color: var(--navy); font-size: 20px; }
 
+.integrated-banner { position: relative; min-height: 390px; display: grid; grid-template-columns: .85fr 1.15fr; align-items: center; gap: 20px; overflow: hidden; margin-bottom: 28px; border: 1px solid rgba(23,56,95,.13); border-radius: 32px; background: linear-gradient(125deg, #eae5f0, #fbf7ef 62%); box-shadow: var(--shadow); }
+.integrated-banner::before { content: ""; position: absolute; inset: 0; opacity: .22; background: url("assets/background-clay.png") center / cover; }
+.integrated-visual, .integrated-copy { position: relative; z-index: 1; }
+.integrated-visual { min-height: 390px; display: grid; place-items: center; }
+.integrated-visual img { width: min(100%, 390px); filter: drop-shadow(0 24px 24px rgba(23,56,95,.16)); }
+.orbit { position: absolute; display: grid; place-items: center; min-width: 60px; height: 38px; padding: 0 13px; border: 1px solid rgba(23,56,95,.16); border-radius: 999px; background: rgba(255,255,255,.78); color: var(--navy); font-size: 14px; font-weight: 800; box-shadow: 0 9px 20px rgba(23,56,95,.08); }
+.orbit-a { top: 54px; left: 38px; }.orbit-b { top: 82px; right: 16px; }.orbit-c { bottom: 44px; left: 68px; }
+.integrated-copy { padding: 48px 58px 48px 20px; }
+.integrated-copy h2 { margin: 12px 0 13px; font-family: Georgia, Pretendard, serif; font-size: 42px; letter-spacing: -.045em; }
+.integrated-copy p { max-width: 570px; margin: 0 0 18px; color: var(--muted); font-size: 16px; word-break: keep-all; }
+.integrated-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 26px; }
+.integrated-tags span { padding: 6px 11px; border: 1px solid rgba(23,56,95,.16); border-radius: 999px; background: rgba(255,255,255,.58); color: var(--navy); font-size: 14px; font-weight: 700; }
+
 .concept-banner { position: relative; min-height: 410px; display: grid; grid-template-columns: 1.1fr .9fr; overflow: hidden; border-radius: 32px; color: #fff; background: var(--navy); box-shadow: var(--shadow); }
 .concept-banner::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(12,31,52,.25), rgba(12,31,52,.94) 58%); pointer-events: none; }
 .concept-banner > img { width: 100%; height: 100%; object-fit: cover; }
@@ -135,6 +148,8 @@ button:focus-visible { outline: 3px solid rgba(40, 102, 157, .28); outline-offse
 .option.correct .option-letter { background: var(--success); color: #fff; }
 .option.wrong { border-color: #d79a90; background: var(--error-bg); color: #8e3e35; }
 .option.wrong .option-letter { background: var(--error); color: #fff; }
+.profile-combination { align-items: flex-start; padding-block: 16px; }
+.profile-combination > span:nth-child(2) { flex: 1; line-height: 1.95; }
 .option-mark { margin-left: auto; font-weight: 900; }
 .explanation { margin: 16px 0 0 52px; padding: 15px 17px; border-radius: 13px; background: #edf2f7; color: #43566b; font-size: 14px; }
 .explanation strong { color: var(--navy); }
@@ -171,6 +186,8 @@ button:focus-visible { outline: 3px solid rgba(40, 102, 157, .28); outline-offse
   .hero-meta { justify-content: center; }
   .hero-art { justify-self: center; width: min(80%, 430px); }
   .topic-grid { grid-template-columns: 1fr; }
+  .integrated-banner { grid-template-columns: .8fr 1.2fr; }
+  .integrated-visual img { width: 310px; }
   .concept-banner { grid-template-columns: 1fr; }
   .concept-banner > img { position: absolute; inset: 0; }
   .concept-banner::after { background: rgba(12,31,52,.82); }
@@ -202,6 +219,12 @@ button:focus-visible { outline: 3px solid rgba(40, 102, 157, .28); outline-offse
   .topic-card h3 { max-width: 82%; font-size: 28px; }
   .topic-card p { max-width: 82%; }
   .concept-banner { min-height: 440px; border-radius: 24px; }
+  .integrated-banner { grid-template-columns: 1fr; gap: 0; border-radius: 24px; }
+  .integrated-visual { min-height: 270px; }
+  .integrated-visual img { width: 270px; }
+  .orbit-a { top: 32px; left: 20px; }.orbit-b { top: 52px; right: 16px; }.orbit-c { bottom: 22px; left: 36px; }
+  .integrated-copy { padding: 20px 24px 34px; }
+  .integrated-copy h2 { font-size: 34px; }
   .concept-copy { padding: 34px 26px; align-self: end; }
   .concept-copy h2 { font-size: 34px; }
   .principles { padding: 80px 0; }

@@ -1,5 +1,14 @@
 const q = (prompt, options, answer, explanation) => ({ prompt, options, answer, explanation });
 const cq = (passage, prompt, options, answer, explanation) => ({ passage, prompt, options, answer, explanation });
+const profileLine = p => `${p.name}: 애니어 ${p.enneagram}번 · ${p.defense} · ${p.mbti} 선호 가설 · ${p.emotion} · ${p.distortion}`;
+const integratedQuestion = (passage, people) => {
+  const correct = people.map(profileLine).join(" | ");
+  const defenseSwap = people.map((p, i) => profileLine({ ...p, defense: people[(i + 1) % people.length].defense, distortion: people[(i + 1) % people.length].distortion })).join(" | ");
+  const typeSwap = people.map((p, i) => profileLine({ ...p, enneagram: people[(i + 2) % people.length].enneagram, mbti: people[(i + 2) % people.length].mbti })).join(" | ");
+  const emotionSwap = people.map((p, i) => profileLine({ ...p, emotion: people[(i + 1) % people.length].emotion, distortion: people[(i + 2) % people.length].distortion })).join(" | ");
+  const explanation = people.map(p => `${p.name}은(는) ${p.enneagram}번 동기, ${p.defense}, ${p.mbti} 선호, ${p.emotion}, ${p.distortion} 가설이 이야기의 단서와 가장 잘 맞습니다.`).join(" ") + " 다만 이는 교육용 가설이며 실제 성격유형이나 내면을 단정하지 않습니다.";
+  return { ...cq(passage, "이야기 속 단서를 근거로 할 때, 세 인물의 통합 프로필을 가장 타당하게 연결한 것은?", [correct, defenseSwap, typeSwap, emotionSwap], 0, explanation), integrated: true };
+};
 
 const topics = {
   defense: {
@@ -335,6 +344,93 @@ Object.entries(finalCaseSets).forEach(([topicKey, cases]) => {
   ));
 });
 
+topics.integrated = {
+  title: "종합 사례 문제", kicker: "INTEGRATED CASE LAB", cover: "assets/cover-concepts.png",
+  description: "여러 인물의 동기·방어·인지·정서를 한 이야기 안에서 함께 추론합니다.", accent: "#7b5f86",
+  levels: [[
+    integratedQuestion(
+      "스타트업의 시연 하루 전, 서윤은 체크리스트의 작은 오류를 발견하고 ‘이런 실수는 절대 있어서는 안 돼’라며 전 과정을 다시 통제했다. 실패하면 무책임한 사람이 될 것 같아 불안했지만 겉으로는 팀원을 과하게 칭찬했다. 민재는 ‘망해도 다음 아이디어가 있지’라며 농담과 새 기능 이야기로 긴장을 돌렸고, 구체적 검증보다 가능성을 말하며 즉석 토론에서 생각을 키웠다. 하람은 자료를 혼자 검토한 뒤 수치로 위험을 설명했지만, 자신의 경쟁심을 인정하기 어려워 ‘서윤이 나를 견제한다’고 확신했다.",
+      [
+        { name:"서윤", enneagram:1, defense:"반동형성", mbti:"ISTJ", emotion:"수치심", distortion:"당위적 사고" },
+        { name:"민재", enneagram:7, defense:"유머", mbti:"ENFP", emotion:"두려움", distortion:"낙관 편향" },
+        { name:"하람", enneagram:5, defense:"투사", mbti:"INTP", emotion:"열등감", distortion:"독심술" }
+      ]
+    ),
+    integratedQuestion(
+      "가족 모임에서 지수는 모두의 접시를 챙기며 ‘내가 필요해야 사랑받는다’고 느꼈고, 피곤하다는 말은 삼켰다. 동생 태경은 진로 질문을 받자 직업별 통계와 산업 전망만 길게 설명하며 속상함에서 거리를 뒀다. 사촌 유나는 한 사람이 자신의 말을 끊자 ‘이 집에서는 아무도 나를 존중하지 않아’라고 결론 내리고, 집에 돌아와 배우자에게 짜증을 냈다.",
+      [
+        { name:"지수", enneagram:2, defense:"억제", mbti:"ESFJ", emotion:"거절 두려움", distortion:"개인화" },
+        { name:"태경", enneagram:5, defense:"주지화", mbti:"INTP", emotion:"수치심", distortion:"정신적 여과" },
+        { name:"유나", enneagram:8, defense:"전치", mbti:"ENTJ", emotion:"무시당한 분노", distortion:"과잉 일반화" }
+      ]
+    ),
+    integratedQuestion(
+      "여행 계획을 세우며 도현은 숙소와 이동을 미리 확정하지 않으면 모든 일정이 무너질 것이라 걱정했다. 불안을 말하는 대신 규정과 일정표만 길게 설명하며 확인을 반복했다. 소미는 선택지를 열어두자며 새로운 장소를 계속 제안했고, 불안한 순간마다 분위기를 웃음으로 넘겼다. 은채는 갈등이 생기자 자신의 선호를 접고 모두의 의견에 맞췄지만, 이후 아무도 자신을 배려하지 않는다고 서운해했다.",
+      [
+        { name:"도현", enneagram:6, defense:"주지화", mbti:"ISTJ", emotion:"불안", distortion:"재앙화" },
+        { name:"소미", enneagram:7, defense:"유머", mbti:"ENFP", emotion:"제한에 대한 두려움", distortion:"낙관 편향" },
+        { name:"은채", enneagram:9, defense:"억제", mbti:"ISFP", emotion:"소외감", distortion:"독심술" }
+      ]
+    ),
+    integratedQuestion(
+      "영상 공개 후 반응이 기대보다 낮자 재민은 ‘성과가 없으면 나는 가치가 없다’며 성공한 장면만 다시 편집해 올렸다. 다솔은 댓글 하나를 보고 ‘사람들이 전부 내 실력을 형편없다고 생각해’라고 느끼며 공격적인 답글을 썼다. 현우는 실망을 인정하는 대신 조회수 알고리즘과 플랫폼 역사만 분석하며 감정 이야기를 피했다.",
+      [
+        { name:"재민", enneagram:3, defense:"보상", mbti:"ENTJ", emotion:"무가치감", distortion:"흑백논리" },
+        { name:"다솔", enneagram:4, defense:"투사", mbti:"INFP", emotion:"수치심", distortion:"과잉 일반화" },
+        { name:"현우", enneagram:5, defense:"주지화", mbti:"INTP", emotion:"실망과 수치심", distortion:"정신적 여과" }
+      ]
+    ),
+    integratedQuestion(
+      "학교 축제를 준비하며 선우는 안전 규정을 반복 확인하고 책임자의 승인 없이는 움직이지 않았다. 아린은 친구들이 자신의 아이디어를 선택하지 않자 ‘나는 이 모임에 필요 없는 사람’이라 느끼면서도 더 친절하게 도왔다. 건우는 예산 삭감에 화가 났지만 담당자에게 말하지 못하고 후배의 작은 지각을 거칠게 비난했다.",
+      [
+        { name:"선우", enneagram:6, defense:"억제", mbti:"ISTJ", emotion:"불안", distortion:"미래 예측" },
+        { name:"아린", enneagram:2, defense:"반동형성", mbti:"ENFJ", emotion:"거절감", distortion:"개인화" },
+        { name:"건우", enneagram:8, defense:"전치", mbti:"ESTJ", emotion:"무력감과 분노", distortion:"낙인찍기" }
+      ]
+    ),
+    integratedQuestion(
+      "연구팀에서 보민은 자신의 가설과 맞는 자료만 모아 ‘결과는 분명하다’고 주장했고, 반대 자료를 낸 동료가 자신을 질투한다고 말했다. 채원은 완벽한 보고서가 아니면 실패라며 밤새 문장을 고쳤다. 루리는 회의에서 즉석으로 여러 가능성을 제안했지만 비판이 나오자 ‘어차피 이 프로젝트는 재미없었다’며 관심을 다른 과제로 돌렸다.",
+      [
+        { name:"보민", enneagram:3, defense:"투사", mbti:"ENTJ", emotion:"인정 상실 두려움", distortion:"확증편향" },
+        { name:"채원", enneagram:1, defense:"보상", mbti:"ISTJ", emotion:"수치심", distortion:"흑백논리" },
+        { name:"루리", enneagram:7, defense:"합리화", mbti:"ENTP", emotion:"실패 두려움", distortion:"긍정 격하" }
+      ]
+    ),
+    integratedQuestion(
+      "친구 셋이 공동 전시를 열었다. 세나는 작품을 칭찬받아도 ‘운이 좋았을 뿐’이라며 긍정적 평가를 받아들이지 못했고 혼자서 다음 작업을 준비했다. 연호는 관객이 잠시 표정을 찌푸리자 ‘내 작품을 비웃는 게 분명해’라고 생각하며 관객을 냉정하다고 비난했다. 가을은 판매가 부진하자 슬픔을 농담과 창작 에너지로 바꾸면서도 다음 전시의 개선점을 기록했다.",
+      [
+        { name:"세나", enneagram:4, defense:"합리화", mbti:"INFP", emotion:"부족감", distortion:"긍정 격하" },
+        { name:"연호", enneagram:6, defense:"투사", mbti:"ISFJ", emotion:"평가 불안", distortion:"독심술" },
+        { name:"가을", enneagram:7, defense:"유머·승화", mbti:"ENFP", emotion:"실망과 두려움", distortion:"인지오류 없음(균형적 재평가)" }
+      ]
+    ),
+    integratedQuestion(
+      "부서 개편 소식에 태윤은 자신의 권한이 줄어들까 두려워 회의 주도권을 강하게 잡았고, 도움 제안을 통제 시도로 해석했다. 해나는 모두가 갈등 없이 지내길 바라며 반대 의견을 말하지 않았지만 업무를 자꾸 미뤘다. 승재는 ‘한 번 구조조정을 하면 우리 팀은 결국 모두 해고될 것’이라 예측하며 규정과 과거 사례를 반복 확인했다.",
+      [
+        { name:"태윤", enneagram:8, defense:"투사", mbti:"ENTJ", emotion:"취약함에 대한 두려움", distortion:"독심술" },
+        { name:"해나", enneagram:9, defense:"억제", mbti:"ISFP", emotion:"갈등 두려움", distortion:"당위적 사고" },
+        { name:"승재", enneagram:6, defense:"주지화", mbti:"ISTJ", emotion:"안전 상실 불안", distortion:"재앙화" }
+      ]
+    ),
+    integratedQuestion(
+      "동호회 회장 선출에서 미영은 모두에게 필요한 사람이 되려고 부탁을 전부 받아들였고, 지쳐도 거절하지 못했다. 주완은 선거에서 지자 경쟁자의 장점을 ‘인맥 덕분’이라고 낮추며 원래 회장에 관심이 없었다고 말했다. 나래는 작은 비판 하나 뒤 자신을 지지했던 사람들까지 모두 적으로 보며 관계를 끊겠다고 했다.",
+      [
+        { name:"미영", enneagram:2, defense:"억제", mbti:"ESFJ", emotion:"거절 두려움", distortion:"당위적 사고" },
+        { name:"주완", enneagram:3, defense:"합리화", mbti:"ESTP", emotion:"수치심", distortion:"긍정 격하" },
+        { name:"나래", enneagram:4, defense:"분열", mbti:"INFP", emotion:"버림받음 두려움", distortion:"흑백논리" }
+      ]
+    ),
+    integratedQuestion(
+      "지역 행사 당일 비가 오자 기획자 세림은 ‘계획대로 못 하면 무능한 사람’이라며 모든 일을 혼자 다시 배치했다. 진행자 준은 관객의 불안을 재치 있는 말로 낮추고 실내 프로그램으로 에너지를 전환했다. 자원봉사자 윤호는 한 관객의 불평을 듣고 ‘행사 전체가 실패했고 모두 나를 탓할 것’이라 생각해 화장실에 숨어 연락을 끊었다.",
+      [
+        { name:"세림", enneagram:1, defense:"보상", mbti:"ESTJ", emotion:"수치심", distortion:"흑백논리" },
+        { name:"준", enneagram:7, defense:"유머·승화", mbti:"ENFP", emotion:"불안", distortion:"인지오류 없음(유연한 재평가)" },
+        { name:"윤호", enneagram:6, defense:"퇴행", mbti:"ISFJ", emotion:"평가 두려움", distortion:"재앙화·독심술" }
+      ]
+    )
+  ]]
+};
+
 const state = {
   topic: null, level: 0, filter: "all", sound: true,
   answers: JSON.parse(localStorage.getItem("mindgrain-answers-v1") || "{}")
@@ -405,7 +501,7 @@ function renderQuiz() {
   document.documentElement.style.setProperty("--topic-accent", topic.accent);
 
   $("#levelTabs").innerHTML = topic.levels.length === 1
-    ? `<button class="level-tab active" type="button" role="tab" aria-selected="true">20문항</button>`
+    ? `<button class="level-tab active" type="button" role="tab" aria-selected="true">${questions.length}문항</button>`
     : topic.levels.map((_, i) => {
         const isDone = answeredCount(state.topic, i) === topic.levels[i].length;
         const label = i === topic.levels.length - 1 ? "FINAL" : `LV.${i + 1}`;
@@ -440,20 +536,24 @@ function questionTemplate(item, index) {
   const order = optionOrder(state.topic, state.level, index, item.options.length);
   const correctLetter = letters[order.indexOf(item.answer)];
   return `<article class="question-card ${answered ? "answered" : ""}" data-question="${index}">
-    ${item.passage ? `<div class="case-passage"><span>보기</span><p>${item.passage}</p></div>` : ""}
+    ${item.passage ? `<div class="case-passage"><span>보기</span><p>${formatRichText(item.passage)}</p></div>` : ""}
     <div class="question-head"><span class="q-number">${String(index + 1).padStart(2, "0")}</span><h2>${item.prompt}</h2></div>
     <div class="options" role="group" aria-label="${index + 1}번 선택지">
       ${order.map((optionIndex, displayIndex) => {
         const option = item.options[optionIndex];
         const isCorrect = answered && optionIndex === item.answer;
         const isWrong = answered && optionIndex === selected && selected !== item.answer;
-        return `<button class="option ${isCorrect ? "correct" : ""} ${isWrong ? "wrong" : ""}" type="button" data-answer="${optionIndex}" ${answered ? "disabled" : ""}>
-          <span class="option-letter">${letters[displayIndex]}</span><span>${option}</span>${isCorrect ? '<span class="option-mark">✓</span>' : isWrong ? '<span class="option-mark">×</span>' : ""}
+        return `<button class="option ${item.integrated ? "profile-combination" : ""} ${isCorrect ? "correct" : ""} ${isWrong ? "wrong" : ""}" type="button" data-answer="${optionIndex}" ${answered ? "disabled" : ""}>
+          <span class="option-letter">${letters[displayIndex]}</span><span>${formatRichText(option)}</span>${isCorrect ? '<span class="option-mark">✓</span>' : isWrong ? '<span class="option-mark">×</span>' : ""}
         </button>`;
       }).join("")}
     </div>
     ${answered ? `<div class="explanation"><strong>${selected === item.answer ? "정답이에요." : `정답은 ${correctLetter}예요.`}</strong> ${item.explanation}</div>` : ""}
   </article>`;
+}
+
+function formatRichText(value) {
+  return String(value).replaceAll(" | ", "<br>").replaceAll("\n", "<br>");
 }
 
 function optionOrder(topicKey, level, index, count) {
